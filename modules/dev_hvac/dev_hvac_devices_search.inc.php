@@ -1,37 +1,31 @@
 <?php
 /*
-* @version 0.1 (wizard)
+* @version 0.2
 */
- global $session;
-  if ($this->owner->name=='panel') {
-   $out['CONTROLPANEL']=1;
-  }
-  $qry="1";
-	if ((time() - intval (gg('cycle_dev_hvacRun'))) < 15 ) {
-		$out['CYCLERUN'] = 1;
-	} else {
-		$out['CYCLERUN'] = 0;
-	}
-  // search filters
-  // QUERY READY
-  global $save_qry;
-  if ($save_qry) {
-   $qry=$session->data['dev_hvac_devices_qry'];
-  } else {
-   $session->data['dev_hvac_devices_qry']=$qry;
-  }
-  if (!$qry) $qry="1";
-  $sortby_dev_hvac_devices="ID DESC";
-  $out['SORTBY']=$sortby_dev_hvac_devices;
-  // SEARCH RESULTS
-  $res=SQLSelect("SELECT * FROM dev_hvac_devices WHERE $qry ORDER BY ".$sortby_dev_hvac_devices);
-  if ($res[0]['ID']) {
-   //paging($res, 100, $out); // search result paging
-   $total=count($res);
-   for($i=0;$i<$total;$i++) {
-    // some action for every record if required
-    $tmp=explode(' ', $res[$i]['UPDATED']);
-    $res[$i]['UPDATED']=fromDBDate($tmp[0])." ".$tmp[1];
-   }
-   $out['RESULT']=$res;
-  }
+global $session;
+
+if (isset($this->owner) && is_object($this->owner) && isset($this->owner->name) && $this->owner->name == 'panel') {
+    $out['CONTROLPANEL'] = 1;
+}
+
+$out['CYCLERUN'] = ((time() - (int)gg('cycle_dev_hvacRun')) < 15) ? 1 : 0;
+
+$sortby_dev_hvac_devices = "ID DESC";
+$out['SORTBY'] = $sortby_dev_hvac_devices;
+
+// SEARCH RESULTS
+$res = SQLSelect("SELECT * FROM dev_hvac_devices ORDER BY " . $sortby_dev_hvac_devices);
+
+if (is_array($res) && isset($res[0]['ID'])) {
+    $total = count($res);
+    for ($i = 0; $i < $total; $i++) {
+        $updated = isset($res[$i]['UPDATED']) ? (string)$res[$i]['UPDATED'] : '';
+        if ($updated === '' || strpos($updated, '0000-00-00') === 0) {
+            $res[$i]['UPDATED'] = '';
+            continue;
+        }
+        $tmp = explode(' ', $updated);
+        $res[$i]['UPDATED'] = fromDBDate($tmp[0]) . (isset($tmp[1]) ? ' ' . $tmp[1] : '');
+    }
+    $out['RESULT'] = $res;
+}

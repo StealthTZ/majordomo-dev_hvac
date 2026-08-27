@@ -61,6 +61,19 @@
  <div class="col-lg-4"><input type="text" class="form-control" name="keys" value="[#KEYS#]" id="keys"></div>
 </div>
 
+<!-- ENCRYPTION (varchar) -->
+<div class="form-group">
+ <label class="col-lg-3 control-label">
+ Протокол Gree:
+ </label>
+ <div class="col-lg-4">
+  <select class="form-control" name="encryption" id="encryption">
+   <option value="ECB"[#if ENCRYPTION_ECB_SELECTED#] selected[#endif#]>v1 (AES-128-ECB)</option>
+   <option value="GCM"[#if ENCRYPTION_GCM_SELECTED#] selected[#endif#]>v2 (AES-128-GCM)</option>
+  </select>
+ </div>
+</div>
+
 <div class="form-group">
  <label class="col-lg-3 control-label">
 Обновлять каждые:

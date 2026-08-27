@@ -24,6 +24,13 @@
   <!-- search results (list) -->
   <form action="?" method="post" name="frmList_hvac_devices" class="form">
    <table align=center class="table table-striped">
+    <tr>
+     <td><#LANG_TYPE#></td>
+     <td><#LANG_TITLE#></td>
+     <td>IP</td>
+     <td>MAC</td>
+     <td>&nbsp;</td>
+    </tr>
     <tbody>
     [#begin RESULT#]
     <tr>
@@ -37,12 +44,12 @@
      </td>
      <td style="vertical-align:middle">
       <b>
-       [#if DEVTYPE!=""#]
-       [#DEVTYPE#]
+       [#if NAME!=""#]
+       [#NAME#]
        [#else#]
-       [#TITLE#]
+       [#DEVTYPE#]
        [#endif#]
-       </a></b>
+      </b>
      </td>
      <td style="vertical-align:middle">
       [#if HOST!=""#]
@@ -61,7 +68,8 @@
      <td style="vertical-align:middle">
       <div>
        [#if "<#ACTION#>"=="admin"#]
-       <a href="?view_mode=edit_dev_hvac_devices&mode=add_from_scan&mac=[#MAC#]&devtype=[#DEVTYPE#]&type=[#TYPE#]&ip=[#HOST#]&title=[#NAME#]&keys=[#KEYS#]" class="btn btn-default" title="Add"><i class="glyphicon glyphicon-plus"></i></a>
+       [#if KNOWN_ID#]<span class="label label-success">&#10003;</span>&nbsp;[#endif#]
+       <a href="?view_mode=edit_dev_hvac_devices&mode=add_from_scan&mac=[#MAC#]&devtype=[#DEVTYPE#]&type=[#TYPE#]&ip=[#HOST#]&title=[#NAME#]&keys64=[#KEYS64#]&encryption=[#ENCRYPTION#]" class="btn btn-default" title="Add"><i class="glyphicon glyphicon-plus"></i></a>
        [#endif ACTION#]
       </div>
      </td>
